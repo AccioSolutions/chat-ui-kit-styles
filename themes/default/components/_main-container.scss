@@ -2,6 +2,8 @@
 @import "../helpers/mixins";
 
 .#{$prefix}-main-container {
+  @include placeDefs();
+
   position:relative;
   @include flex-row;
   height: 100%;
@@ -18,9 +20,9 @@
     flex-basis: $main-container-conversation-list-flex-basis;
     border-top: $main-container-conversation-list-border-top;
     border-right: $main-container-conversation-list-border-right;
-    border-botton: $main-container-conversation-list-border-bottom;
+    border-bottom: $main-container-conversation-list-border-bottom;
     border-left: $main-container-conversation-list-border-left;
-    box-shadow: 2px 0 5px -2px rgba(0,0,0,0.38);
+    // box-shadow: 2px 0 5px -2px rgba(0,0,0,0.38);
     /* Hmm without this, box shadow is cut at bottom */
     z-index:2;
   }

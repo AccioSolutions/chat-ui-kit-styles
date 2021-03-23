@@ -111,7 +111,7 @@ $_conversation-unread-right: 0.8em;
     @include flex-row;
     align-items: center;
     margin: $conversation-operations-margin;
-    color: lighten($color-text, 70);
+    color: $color-text-medium;
     visibility: hidden;
   }
 
@@ -120,7 +120,7 @@ $_conversation-unread-right: 0.8em;
   }
   
   &__operations:hover {
-    color: lighten($color-text, 40);
+    color: $color-text-medium;
   }
 
   &:hover &__operations {

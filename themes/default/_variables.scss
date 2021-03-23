@@ -1,6 +1,3 @@
-// Variables
-//
-//
 
 @import "helpers/functions";
 
@@ -23,28 +20,68 @@ $grid-breakpoints: (
 // Default font family
 //
 
+$vars: ();
+
+@mixin def($var, $value) {
+  $vars: map-merge($vars, ($var: #{$value})) !global;
+}
+
+@function valueDef($var) {
+  @return map-get($vars, $var);
+}
+
+@function useDef($var) {
+  @return var(--#{$prefix}-#{$var});
+}
+
+@mixin placeDefs {
+  @each $var, $v in $vars {
+    --#{$prefix}-#{$var}: #{$v};
+  }
+
+}
+
+@include def('color-primary', #c6e3fa);
+@include def('color-primary-light', #f6fbff);
+@include def('color-primary-dark', #6ea9d7);
+@include def('color-primary-darker', #6eaad8);
+
+@include def('color-secondary', #91ECEC);
+@include def('color-secondary-light', #C2F9F9);
+@include def('color-secondary-dark', #64D3D3);
+
+@include def('color-text', rgba(0, 0, 0, .87));
+@include def('color-text-medium', rgba(0, 0, 0, .60));
+@include def('color-text-disabled', rgba(0, 0, 0, .38));
+@include def('color-text-inverted', rgba(0, 0, 0, .27));
+
+@include def('default-bg-color', #fff);
+@include def('default-border-color', #ecececee);
+
+@include def('conversation-header-bg-color', #{useRef('default-bg-color')});
+@include def('conversation-header-color', #{useRef('color-text')});
+@include def('conversation-header-info-color', #{useRef('color-text-medium')});
+
 $default-font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
 
 // Colors
 //
 
-$color-primary: #c6e3fa;
-$color-primary-light: #f6fbff;
-$color-primary-dark: #6ea9d7;
-$color-primary-dark: #6EAAD8;
+$color-primary: useDef('color-primary') !important;
+$color-primary-light: useDef('color-primary-light') !important;
+$color-primary-dark: useDef('color-primary-dark') !important;
+$color-primary-darker: useDef('color-primary-darker') !important;
 
-$color-secondary: #91ECEC;
-$color-secondary-light: #C2F9F9;
-$color-secondary-dark: #64D3D3;
+$color-secondary: useDef('color-secondary') !important;
+$color-secondary-light: useDef('color-secondary-light') !important;
+$color-secondary-dark: useDef('color-secondary-dark') !important;
 
-// Material text colors
+// text colors
 // http://marcodiiga.github.io/rgba-to-rgb-conversion
-// Hex values are calculated based on white background 
-// If you change background color rgb color will change, that is why its better to use rgba with opacity!
-$color-text: rgba(0, 0, 0, .87) !default; // #212121
-$color-text-medium: rgba(0, 0, 0, .60) !default; // #666666
-$color-text-disabled: rgba(0, 0, 0, .38) !default; // #9e9e9e
-$color-text-inverted: invert($color-text); 
+$color-text: useDef('color-text') !default; // #212121
+$color-text-medium: useDef('color-text-medium') !default; // #666666
+$color-text-disabled: useRef('color-text-disabled') !default; // #9e9e9e
+$color-text-inverted: useRef('color-text-inverted') !default; 
 
 // Base colors
 //
@@ -52,23 +89,23 @@ $color-text-inverted: invert($color-text);
 $color-white: #fff !default;
 $color-black: #000 !default;
 
-$default-bg-color: $color-white !default;
+$default-bg-color: useDef('default-bg-color') !default;
 
 // Element colors
 //
 
-$default-border-color: rgba-to-rgb(rgba(scale-color($color-primary-dark, $saturation: -55%), 0.4), $default-bg-color) !default;
+$default-border-color: useDef('default-border-color') !default;
 
 // State colors
 //
 
 $color-hover: $color-text !default;
-$color-bg-hover: rgba-to-rgb(rgba($color-primary-dark, 0.08), $default-bg-color) !default;
+$color-bg-hover: $color-primary-dark !default;
 $color-focus: $color-text !default;
-$color-bg-focus: rgba-to-rgb(rgba($color-primary-dark, 0.24), $color-primary-light) !default;
-$color-selected: darken($color-primary-dark, 25%) !default;
+$color-bg-focus: $color-primary-darker !default;
+$color-selected: $color-primary-darker !default;
 $color-bg-selected: $color-bg-focus !default;
-$color-activated: darken($color-primary-dark, 25%)  !default;
+$color-activated: $color-primary-darker  !default;
 $color-bg-activated: $color-bg-focus !default;
 $color-active: $color-primary-dark !default;
 $color-bg-active: $color-bg-activated !default;
@@ -249,11 +286,11 @@ $conversation-header-border-bottom: solid 1px $default-border-color !default;
 $conversation-header-border-left: solid 0px $default-border-color !default;
 
 // Colors
-$conversation-header-bg-color: $color-primary-light !default;
-$conversation-header-color: color-by-background($conversation-header-bg-color, $color-text, $color-text-inverted) !default;
+$conversation-header-bg-color: useDef('conversation-header-bg-color') !default;
+$conversation-header-color: useDef('conversation-header-color') !default;
 $conversation-header-user-name-color: $conversation-header-color !default;
 $conversation-header-user-name-bg-color: $conversation-header-bg-color !default;
-$conversation-header-info-color: color-by-background($conversation-header-bg-color, $color-text-medium, $color-text-inverted) !default;
+$conversation-header-info-color: useDef('conversation-header-info-color') !default;
 $conversation-header-info-bg-color: $conversation-header-bg-color !default;
 $conversation-header-action-button-color: normal !default;
 $conversation-header-action-button-bg-color: transparent !default;
@@ -483,10 +520,10 @@ $message-base-radius $message-base-radius !default;
 $message-color: $color-text !default;
 $message-bg-color: transparent !default;
 
-$message-header-color: lighten($color-text, 30) !default;
+$message-header-color: useRef('color-text-medium') !default;
 $message-header-bg-color: transparent !default;
 
-$message-footer-color: lighten($color-text, 30) !default;
+$message-footer-color: useRef('color-text-medium') !default;
 $message-footer-bg-color: transparent !default;
 
 $message-incoming-color: $message-color !default;
@@ -618,7 +655,7 @@ $message-input-content-editor-wrapper-bg-color: $color-primary !default;
 $message-input-content-editor-container-bg-color: $message-input-content-editor-wrapper-bg-color !default;
 $message-input-content-editor-bg-color: $message-input-content-editor-wrapper-bg-color !default;
 $message-input-content-editor-disabled-color: $color-text-medium !default;
-$message-input-content-editor-disabled-bg-color: rgba($message-input-content-editor-bg-color, 0.38) !default;
+$message-input-content-editor-disabled-bg-color: useDef('color-primary-light') !default;
 
 // Fonts
 $message-input-content-editor-font-family: $default-font-family !default;
@@ -695,7 +732,7 @@ $search-bg-color: $color-primary !default;
 $search-color: $color-text !default;
 $search-icon-color: $color-primary-dark !default;
 $search-clear-icon-color: $search-icon-color !default;
-$search-clear-icon-color-hover: rgba($color-primary-dark, 0.6) !default;
+$search-clear-icon-color-hover: useDef('color-primary-light') !default;
 $search-placeholder-color: $color-text !default;
 $search-input-bg-color: $search-bg-color !default;
 $search-disabled-color: $color-disabled !default;
